@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KnapsackProblem.Dtos
+namespace KnapsackSdk.Dtos
 {
     public class DefinitionDto
     {

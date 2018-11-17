@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using KnapsackProblem.Dtos;
+using KnapsackSdk.Dtos;
 
-namespace KnapsackProblem.Strategies
+namespace KnapsackSdk.Strategies
 {
     public class BranchesAndBoundariesStrategy : AbstractStrategy
     {
         public override ResultDto Compute(DefinitionDto definition)
         {
             var sum = 0L;
-            var maxPrices = definition.Items.Reverse().Select(item =>
+            var maxPrices = Enumerable.Reverse(definition.Items).Select(item =>
             {
                 sum += item.Price;
                 return sum;

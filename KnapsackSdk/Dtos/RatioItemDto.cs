@@ -1,4 +1,4 @@
-﻿namespace KnapsackProblem.Dtos
+﻿namespace KnapsackSdk.Dtos
 {
     public class RatioItemDto : ItemDto
     {

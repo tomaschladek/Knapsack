@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using KnapsackProblem.Dtos;
-using KnapsackProblem.Strategies;
+using KnapsackSdk.Dtos;
 
-namespace KnapsackProblem
+namespace KnapsackSdk.Strategies
 {
     public abstract class AbstractStrategy : IStrategy
     {

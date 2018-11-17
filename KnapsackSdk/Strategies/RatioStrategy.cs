@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using KnapsackProblem.Dtos;
+using KnapsackSdk.Dtos;
 
-namespace KnapsackProblem.Strategies
+namespace KnapsackSdk.Strategies
 {
     public class RatioStrategy : AbstractStrategy
     {
         public override ResultDto Compute(DefinitionDto definition)
         {
-            var ratioItems = definition.Items.Select(item => new RatioItemDto(item.Weight, item.Price)).OrderByDescending(item => item.Ratio).ToList();
+            var ratioItems = Enumerable.Select(definition.Items, item => new RatioItemDto(item.Weight, item.Price)).OrderByDescending(item => item.Ratio).ToList();
             var list = new List<bool>();
             var weightSum = 0L;
             var priceSum = 0L;

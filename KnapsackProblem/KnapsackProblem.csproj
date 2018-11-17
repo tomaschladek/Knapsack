@@ -8,9 +8,10 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>KnapsackProblem</RootNamespace>
     <AssemblyName>KnapsackProblem</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,27 +44,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractStrategy.cs" />
-    <Compile Include="Dtos\DefinitionDto.cs" />
-    <Compile Include="Strategies\AbstractDecompositionStrategy.cs" />
-    <Compile Include="Strategies\BranchesAndBoundariesStrategy.cs" />
-    <Compile Include="Strategies\DecompositionByPriceStrategy.cs" />
-    <Compile Include="Strategies\DecompositionByWeightRecursiveStrategy.cs" />
-    <Compile Include="Strategies\DecompositionByWeightStrategy.cs" />
-    <Compile Include="Strategies\FtpasStrategy.cs" />
-    <Compile Include="Strategies\IStrategy.cs" />
-    <Compile Include="Dtos\ItemDto.cs" />
-    <Compile Include="Strategies\IterativeStrategy.cs" />
+    <Compile Include="ExecutionResultDto.cs" />
+    <Compile Include="IExecutor.cs" />
+    <Compile Include="IFileManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Dtos\RatioItemDto.cs" />
-    <Compile Include="Strategies\RatioStrategy.cs" />
-    <Compile Include="Strategies\RecursiveStrategy.cs" />
-    <Compile Include="Dtos\ResultDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\KnapsackSdk\KnapsackSdk.csproj">
+      <Project>{761F8D04-6D02-4CC4-AD0F-110F1696238B}</Project>
+      <Name>KnapsackSdk</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

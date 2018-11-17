@@ -2,7 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/KnapsackProblem/v15/Server/sqlite3/storage.ide
-/.vs/KnapsackProblem/v15/Server/sqlite3/db.lock
-/.vs/KnapsackProblem/v15/Server/sqlite3/storage.ide-wal
-/.vs/KnapsackProblem/v15/Server/sqlite3/storage.ide-shm
+/.vs/KnapsackProblem/*
+*/bin/*
+*/obj/*

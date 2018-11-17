@@ -1,6 +1,6 @@
-﻿using KnapsackProblem.Dtos;
+﻿using KnapsackSdk.Dtos;
 
-namespace KnapsackProblem.Strategies
+namespace KnapsackSdk.Strategies
 {
     public interface IStrategy
     {
