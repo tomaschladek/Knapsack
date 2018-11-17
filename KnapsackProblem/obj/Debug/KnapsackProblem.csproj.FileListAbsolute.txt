@@ -1,7 +1,0 @@
-C:\Users\tomas.chladek\Documents\Personal\Uni\Master\3rd\PAA\src\KnapsackProblem\KnapsackProblem\bin\Debug\KnapsackProblem.exe.config
-C:\Users\tomas.chladek\Documents\Personal\Uni\Master\3rd\PAA\src\KnapsackProblem\KnapsackProblem\bin\Debug\KnapsackProblem.exe
-C:\Users\tomas.chladek\Documents\Personal\Uni\Master\3rd\PAA\src\KnapsackProblem\KnapsackProblem\bin\Debug\KnapsackProblem.pdb
-C:\Users\tomas.chladek\Documents\Personal\Uni\Master\3rd\PAA\src\KnapsackProblem\KnapsackProblem\obj\Debug\KnapsackProblem.csprojResolveAssemblyReference.cache
-C:\Users\tomas.chladek\Documents\Personal\Uni\Master\3rd\PAA\src\KnapsackProblem\KnapsackProblem\obj\Debug\KnapsackProblem.csproj.CoreCompileInputs.cache
-C:\Users\tomas.chladek\Documents\Personal\Uni\Master\3rd\PAA\src\KnapsackProblem\KnapsackProblem\obj\Debug\KnapsackProblem.exe
-C:\Users\tomas.chladek\Documents\Personal\Uni\Master\3rd\PAA\src\KnapsackProblem\KnapsackProblem\obj\Debug\KnapsackProblem.pdb
