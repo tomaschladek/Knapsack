@@ -10,7 +10,7 @@ namespace KnapsackProblem
     {
         IEnumerable<DefinitionDto> GetDefinitions(string path);
         IEnumerable<ResultDto> GetResults(string path);
-        void AppendResult(string path, ExecutionResultDto result);
+        void AppendResult(string path, int taskSize, ExecutionResultDto result);
     }
 
     public class FileManager : IFileManager
@@ -32,9 +32,9 @@ namespace KnapsackProblem
             }
         }
 
-        public void AppendResult(string path, ExecutionResultDto result)
+        public void AppendResult(string path, int taskSize, ExecutionResultDto result)
         {
-            File.AppendAllText(path,$"{result.TaskSize}\t{result.StrategyId}\t{result.Duration}\t{result.RelativeError}\t{result.MaxError}{Environment.NewLine}");
+            File.AppendAllText(path,$"{taskSize}\t{result.StrategyId}\t{result.Duration}\t{result.RelativeError}\t{result.MaxError}{Environment.NewLine}");
         }
 
         private static ResultDto GetResult(string text)

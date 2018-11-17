@@ -10,8 +10,6 @@ namespace KnapsackProblem
         public const string SourcePath =
             @"C:\Users\tomas.chladek\Documents\Personal\Uni\Master\3rd\PAA\Knapsack\";
 
-        private const bool DebugFlag = true;
-
         static void Main()
         {
             var taskSizes = new[] { 4, 10, 15, 20, 22, 25, 27, 30, 32, 35, 37, 40 };
@@ -30,11 +28,12 @@ namespace KnapsackProblem
                 //new FtpasStrategy(16),
             };
 
-            ExecuteTasksOnStrategies(taskSizes, strategies,10);
+            ExecuteTasksOnStrategies(taskSizes, strategies,10, true);
 
         }
 
-        private static void ExecuteTasksOnStrategies(int[] taskSizes, List<IStrategy> strategies, int repetition)
+        private static void ExecuteTasksOnStrategies(int[] taskSizes, List<IStrategy> strategies, int repetition,
+            bool logResults)
         {
             IFileManager fileManager = new FileManager();
             IExecutor executor = new Executor();
@@ -46,10 +45,10 @@ namespace KnapsackProblem
 
                 foreach (var strategy in strategies)
                 {
-                    var result = executor.ExecuteStrategy(taskSize, definitions, results, strategy, repetition);
-                    if (DebugFlag)
+                    var result = executor.ExecuteStrategy(definitions, results, strategy, repetition);
+                    if (logResults)
                     {
-                        fileManager.AppendResult(Path.Combine(SourcePath, "result2018.csv"), result);
+                        fileManager.AppendResult(Path.Combine(SourcePath, "result2018.csv"), taskSize, result);
                     }
                 }
             }
