@@ -6,7 +6,7 @@ namespace KnapsackSdk.Strategies
 {
     public class RatioStrategy : AbstractStrategy
     {
-        public override ResultDto Compute(DefinitionDto definition)
+        public override (ResultDto, long) Compute(DefinitionDto definition)
         {
             var ratioItems = Enumerable.Select(definition.Items, item => new RatioItemDto(item.Weight, item.Price)).OrderByDescending(item => item.Ratio).ToList();
             var list = new List<bool>();
@@ -25,7 +25,7 @@ namespace KnapsackSdk.Strategies
                     list.Add(false);
                 }
             }
-            return new ResultDto(definition.Id,priceSum,list);
+            return (new ResultDto(definition.Id,priceSum,list),1);
         }
 
         public override string Id => "Ratio";

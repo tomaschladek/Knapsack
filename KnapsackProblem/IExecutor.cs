@@ -44,7 +44,7 @@ namespace KnapsackProblem
                 {
                     var computedResult = strategy.Compute(definition);
 
-                    return (double) (result.Price - computedResult.Price) / result.Price;
+                    return (double) (result.Price - computedResult.Item1.Price) / result.Price;
                 }).ToList();
 
             }

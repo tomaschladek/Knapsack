@@ -5,7 +5,7 @@ namespace KnapsackSdk.Strategies
 {
     public abstract class AbstractStrategy : IStrategy
     {
-        public abstract ResultDto Compute(DefinitionDto definition);
+        public abstract (ResultDto, long) Compute(DefinitionDto definition);
         public abstract string Id { get; }
 
 

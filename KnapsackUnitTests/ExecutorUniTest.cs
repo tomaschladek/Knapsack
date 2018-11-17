@@ -10,9 +10,24 @@ namespace KnapsackUnitTests
     [TestFixture]
     public class ExecutorUniTest
     {
+
         private IDictionary<DefinitionDto, ResultDto> _samples = new Dictionary<DefinitionDto, ResultDto>();
         protected Executor Executor { get; set; }
 
+        protected readonly IList<IStrategy> Strategies = new List<IStrategy>
+        {
+            new IterativeStrategy(),
+            new RecursiveStrategy(),
+            new BranchesAndBoundariesStrategy(),
+            new DecompositionByPriceStrategy(),
+            new DecompositionByWeightStrategy(),
+            new DecompositionByWeightRecursiveStrategy(),
+            new FtpasStrategy(2),
+            new FtpasStrategy(4),
+            new FtpasStrategy(8),
+            new FtpasStrategy(16),
+            new RatioStrategy(),
+        };
         [SetUp]
         public void Setup()
         {
@@ -52,12 +67,18 @@ namespace KnapsackUnitTests
         public sealed class ExecutorUniTestShould : ExecutorUniTest
         {
             [Test]
-            public void ReturnExactResultForIteration()
+            [TestCase(EStrategy.Iteration)]
+            [TestCase(EStrategy.Recursive)]
+            [TestCase(EStrategy.BandB)]
+            [TestCase(EStrategy.DecompositionByPrice)]
+            [TestCase(EStrategy.DecompositionByWeight)]
+            [TestCase(EStrategy.DecompositionByWeightRecursive)]
+            public void ReturnExactResultForIteration(EStrategy strategy)
             {
-                var result = Executor.ExecuteStrategy(_samples.Keys.ToList(), _samples.Keys.Select(key => _samples[key]).ToList(), new IterativeStrategy(), 1);
+                var result = Executor.ExecuteStrategy(_samples.Keys.ToList(), _samples.Keys.Select(key => _samples[key]).ToList(), GetStrategy(strategy), 1);
                 Assert.AreEqual(0,result.MaxError);
                 Assert.AreEqual(0,result.RelativeError);
-                Assert.AreEqual(new IterativeStrategy().Id, result.StrategyId);
+                Assert.AreEqual(GetStrategy(strategy).Id, result.StrategyId);
             }
 
             [Test]
@@ -67,6 +88,30 @@ namespace KnapsackUnitTests
                 var result = Executor.ExecuteStrategy(_samples.Keys.ToList(), _samples.Keys.Select(key => _samples[key]).ToList(), strategy, 2);
                 Assert.AreEqual(0.1122,result.MaxError,0.0001);
                 Assert.AreEqual(0.1590,result.RelativeError, 0.0001);
+            }
+
+            [Test]
+            [TestCase(EStrategy.Iteration,16)]
+            [TestCase(EStrategy.Recursive,16)]
+            [TestCase(EStrategy.BandB,2)]
+            [TestCase(EStrategy.DecompositionByPrice,2664)]
+            [TestCase(EStrategy.DecompositionByWeight,404)]
+            [TestCase(EStrategy.DecompositionByWeightRecursive,10)]
+            [TestCase(EStrategy.Ftpas2,1336)]
+            [TestCase(EStrategy.Ftpas4,672)]
+            [TestCase(EStrategy.Ftpas8,340)]
+            [TestCase(EStrategy.Ftpas16,172)]
+            [TestCase(EStrategy.Ratio,1)]
+            public void ReturnCountersCorrectly(EStrategy strategyIndex, long expectedResult)
+            {
+                var strategy = GetStrategy(strategyIndex);
+                var result = strategy.Compute(_samples.Keys.First());
+                Assert.AreEqual(expectedResult, result.Item2);
+            }
+
+            private IStrategy GetStrategy(EStrategy strategyIndex)
+            {
+                return Strategies[(int)strategyIndex];
             }
         }
     }

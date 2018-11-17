@@ -6,14 +6,15 @@ namespace KnapsackSdk.Strategies
 {
     public class DecompositionByWeightRecursiveStrategy : AbstractStrategy
     {
-        public override ResultDto Compute(DefinitionDto definition)
+        public override (ResultDto, long) Compute(DefinitionDto definition)
         {
             var searchSpace = new RemainderDto[definition.Capacity + 1, definition.Items.Count+1];
-            return ComputeResultRecursively(definition, new List<bool>(), 0, 0, searchSpace);
+            var counter = 0L;
+            return (ComputeResultRecursively(definition, new List<bool>(), 0, 0, searchSpace, ref counter),counter);
         }
 
         private ResultDto ComputeResultRecursively(DefinitionDto definition, List<bool> result, long weight, long price,
-            RemainderDto[,] searchSpace)
+            RemainderDto[,] searchSpace, ref long counter)
         {
             if (weight > definition.Capacity)
             {
@@ -21,6 +22,7 @@ namespace KnapsackSdk.Strategies
             }
             if (result.Count == definition.Items.Count)
             {
+                counter++;
                 return new ResultDto(definition.Id, GetSum(result, definition.Items).Price, result);
             }
 
@@ -32,7 +34,7 @@ namespace KnapsackSdk.Strategies
                     result.Concat(cachedResult.Result).ToList());
             }
 
-            var newResult = GetNewResult(definition, result, weight, price, searchSpace);
+            var newResult = GetNewResult(definition, result, weight, price, searchSpace, ref counter);
 
             if (newResult != null)
             {
@@ -42,10 +44,10 @@ namespace KnapsackSdk.Strategies
             return newResult;
         }
 
-        private ResultDto GetNewResult(DefinitionDto definition, List<bool> result, long weight, long price, RemainderDto[,] searchSpace)
+        private ResultDto GetNewResult(DefinitionDto definition, List<bool> result, long weight, long price, RemainderDto[,] searchSpace, ref long counter)
         {
-            var resultWith = GetWithResult(definition, result, weight, price, searchSpace);
-            var resultWithout = ComputeResultRecursively(definition, new List<bool>(result) { false }, weight, price, searchSpace);
+            var resultWith = GetWithResult(definition, result, weight, price, searchSpace,ref counter);
+            var resultWithout = ComputeResultRecursively(definition, new List<bool>(result) { false }, weight, price, searchSpace, ref counter);
 
             var returnValue = resultWithout;
             if (IsWithBetter(resultWith, resultWithout))
@@ -70,14 +72,14 @@ namespace KnapsackSdk.Strategies
                 : searchSpace[weight, result.Count];
         }
 
-        private ResultDto GetWithResult(DefinitionDto definition, List<bool> result, long weight, long price, RemainderDto[,] searchSpace)
+        private ResultDto GetWithResult(DefinitionDto definition, List<bool> result, long weight, long price, RemainderDto[,] searchSpace, ref long counter)
         {
             var item = definition.Items[result.Count];
             var sumWeight = weight + item.Weight;
             ResultDto resultWith = null;
             if (sumWeight <= definition.Capacity)
             {
-                resultWith = ComputeResultRecursively(definition, new List<bool>(result) { true }, sumWeight, price + item.Price, searchSpace);
+                resultWith = ComputeResultRecursively(definition, new List<bool>(result) { true }, sumWeight, price + item.Price, searchSpace, ref counter);
             }
 
             return resultWith;

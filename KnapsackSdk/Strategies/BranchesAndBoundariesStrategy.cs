@@ -6,7 +6,7 @@ namespace KnapsackSdk.Strategies
 {
     public class BranchesAndBoundariesStrategy : AbstractStrategy
     {
-        public override ResultDto Compute(DefinitionDto definition)
+        public override (ResultDto, long) Compute(DefinitionDto definition)
         {
             var sum = 0L;
             var maxPrices = Enumerable.Reverse(definition.Items).Select(item =>
@@ -15,10 +15,13 @@ namespace KnapsackSdk.Strategies
                 return sum;
             }).Reverse().ToList();
             long max = -1;
-            return ComputeResultRecursively(definition, new List<bool>(), maxPrices, ref max, 0, 0);
+            int counter = 0;
+            var result = ComputeResultRecursively(definition, new List<bool>(), maxPrices, ref max, 0, 0, ref counter);
+            return (result,counter);
         }
 
-        private ResultDto ComputeResultRecursively(DefinitionDto definition, List<bool> result, List<long> maxPrices, ref long currentMax, long currentWeight, long currentPrice)
+        private ResultDto ComputeResultRecursively(DefinitionDto definition, List<bool> result, List<long> maxPrices,
+            ref long currentMax, long currentWeight, long currentPrice, ref int counter)
         {
 
             if (currentWeight > definition.Capacity
@@ -29,11 +32,12 @@ namespace KnapsackSdk.Strategies
             }
             if (result.Count == definition.Items.Count)
             {
+                counter++;
                 return new ResultDto(definition.Id, currentPrice, result);
             }
 
-            var resultWith = ComputeResultRecursively(definition, new List<bool>(result) { true }, maxPrices, ref currentMax, currentWeight + definition.Items[result.Count].Weight, currentPrice + definition.Items[result.Count].Price);
-            var resultWithout = ComputeResultRecursively(definition, new List<bool>(result) { false }, maxPrices, ref currentMax, currentWeight, currentPrice);
+            var resultWith = ComputeResultRecursively(definition, new List<bool>(result) { true }, maxPrices, ref currentMax, currentWeight + definition.Items[result.Count].Weight, currentPrice + definition.Items[result.Count].Price, ref counter);
+            var resultWithout = ComputeResultRecursively(definition, new List<bool>(result) { false }, maxPrices, ref currentMax, currentWeight, currentPrice, ref counter);
 
             if (resultWith != null
                 && (resultWithout == null

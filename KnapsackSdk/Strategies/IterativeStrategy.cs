@@ -6,7 +6,7 @@ namespace KnapsackSdk.Strategies
 {
     public class IterativeStrategy : AbstractStrategy
     {
-        public override ResultDto Compute(DefinitionDto definition)
+        public override (ResultDto, long) Compute(DefinitionDto definition)
         {
             var maxValue = Math.Pow(2, definition.Items.Count);
             var maxPrice = 0L;
@@ -23,7 +23,7 @@ namespace KnapsackSdk.Strategies
                 }
             }
 
-            return new ResultDto(definition.Id, maxPrice, GetItems(bestSeed, definition.Items.Count));
+            return (new ResultDto(definition.Id, maxPrice, GetItems(bestSeed, definition.Items.Count)),(long)maxValue);
         }
 
         public override string Id => "Iterative";

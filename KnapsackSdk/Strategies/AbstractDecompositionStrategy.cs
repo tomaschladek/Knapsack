@@ -12,7 +12,7 @@ namespace KnapsackSdk.Strategies
         protected abstract long GetCompositionValue(ItemDto item);
         protected abstract long GetTableValue(ItemDto item);
 
-        public override ResultDto Compute(DefinitionDto definition)
+        public override (ResultDto, long) Compute(DefinitionDto definition)
         {
             var searchSpaceSize = GetSearchSpaceSize(definition);
             var searchSpace = new long[searchSpaceSize, definition.Items.Count];
@@ -20,7 +20,7 @@ namespace KnapsackSdk.Strategies
             var referencePoint = GetMaxPricePoint(definition, searchSpaceSize, searchSpace);
             var result = ReconstructItems(searchSpace, referencePoint.X, referencePoint.Y, definition);
 
-            return new ResultDto(definition.Id, GetResultValue(result,definition), result);
+            return (new ResultDto(definition.Id, GetResultValue(result,definition), result), definition.Items.Count*searchSpaceSize);
         }
 
         private long GetResultValue(IList<bool> result, DefinitionDto definition)
