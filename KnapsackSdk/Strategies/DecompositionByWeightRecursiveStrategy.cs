@@ -6,6 +6,16 @@ namespace KnapsackSdk.Strategies
 {
     public class DecompositionByWeightRecursiveStrategy : AbstractStrategy
     {
+
+        public DecompositionByWeightRecursiveStrategy() : this("")
+        {
+        }
+
+        public DecompositionByWeightRecursiveStrategy(string id)
+        {
+            Id = $"Decomposition by Weight Recursive{id}";
+        }
+
         public override (ResultDto, long) Compute(DefinitionDto definition)
         {
             var searchSpace = new RemainderDto[definition.Capacity + 1, definition.Items.Count+1];
@@ -85,7 +95,7 @@ namespace KnapsackSdk.Strategies
             return resultWith;
         }
 
-        public override string Id => "Decomposition by Weight Recursive";
+        public override string Id { get; }
 
         private class RemainderDto
         {

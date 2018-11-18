@@ -14,5 +14,10 @@
             RelativeError = relativeError;
             MaxError = maxError;
         }
+
+        public override string ToString()
+        {
+            return $"{Duration}\t{RelativeError}\t{MaxError}";
+        }
     }
 }

@@ -7,9 +7,10 @@ namespace KnapsackSdk.Strategies
     {
         private double Precision { get; }
 
-        public FtpasStrategy(double precision)
+        public FtpasStrategy(double precision, string suffix = "")
         {
             Precision = precision;
+            Id = $"FTPAS R={Precision}{suffix}";
         }
 
         protected override int GetSearchSpaceSize(DefinitionDto definition)
@@ -22,6 +23,6 @@ namespace KnapsackSdk.Strategies
             return (long) Math.Ceiling(base.GetCompositionValue(item)/Precision);
         }
 
-        public override string Id => $"FTPAS R={Precision}";
+        public override string Id { get; }
     }
 }

@@ -6,6 +6,15 @@ namespace KnapsackSdk.Strategies
 {
     public class BranchesAndBoundariesStrategy : AbstractStrategy
     {
+        public BranchesAndBoundariesStrategy() : this("")
+        {
+        }
+
+        public BranchesAndBoundariesStrategy(string id)
+        {
+            Id = $"B&B{id}";
+        }
+
         public override (ResultDto, long) Compute(DefinitionDto definition)
         {
             var sum = 0L;
@@ -57,6 +66,6 @@ namespace KnapsackSdk.Strategies
             return resultWithout;
         }
 
-        public override string Id => "B&B";
+        public override string Id { get; }
     }
 }
