@@ -1,6 +1,6 @@
 ﻿using KnapsackSdk.Strategies;
 
-namespace KnapsackProblem.Experiments
+namespace KnapsackProblem.Experiments.Performance
 {
     public class InstanceSizeExperiment : AbstractCounterExperiment
     {

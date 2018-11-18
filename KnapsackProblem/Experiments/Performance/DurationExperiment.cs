@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace KnapsackProblem.Experiments
+namespace KnapsackProblem.Experiments.Performance
 {
     public class DurationExperiment : AbstractExperiment<ExecutionResultDto>
     {

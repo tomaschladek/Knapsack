@@ -48,20 +48,20 @@
     <Compile Include="Experiments\AbstractCounterExperiment.cs" />
     <Compile Include="Experiments\AbstractExperiment.cs" />
     <Compile Include="Experiments\AbstractGeneratorExperiment.cs" />
-    <Compile Include="Experiments\CapacityLargeItemsExperiment.cs" />
-    <Compile Include="Experiments\CapacityNormalItemsExperiment.cs" />
-    <Compile Include="Experiments\CapacityOnlyExperiment.cs" />
-    <Compile Include="Experiments\CapacitySmallItemsExperiment.cs" />
-    <Compile Include="Experiments\CounterExperiment.cs" />
-    <Compile Include="Experiments\DurationExperiment.cs" />
+    <Compile Include="Experiments\Performance\CapacityLargeItemsExperiment.cs" />
+    <Compile Include="Experiments\Performance\CapacityNormalItemsExperiment.cs" />
+    <Compile Include="Experiments\Performance\CapacityOnlyExperiment.cs" />
+    <Compile Include="Experiments\Performance\CapacitySmallItemsExperiment.cs" />
+    <Compile Include="Experiments\Performance\CounterExperiment.cs" />
+    <Compile Include="Experiments\Performance\DurationExperiment.cs" />
     <Compile Include="Experiments\Generator.cs" />
     <Compile Include="Experiments\IExperiment.cs" />
     <Compile Include="Experiments\IGenerator.cs" />
-    <Compile Include="Experiments\InstanceSizeExperiment.cs" />
-    <Compile Include="Experiments\MaxPriceExperiment.cs" />
-    <Compile Include="Experiments\MaxPriceRatioExperiment.cs" />
-    <Compile Include="Experiments\MaxWeightExperiment.cs" />
-    <Compile Include="Experiments\MaxWeightRatioExperiment.cs" />
+    <Compile Include="Experiments\Performance\InstanceSizeExperiment.cs" />
+    <Compile Include="Experiments\Performance\MaxPriceExperiment.cs" />
+    <Compile Include="Experiments\Performance\MaxPriceRatioExperiment.cs" />
+    <Compile Include="Experiments\Performance\MaxWeightExperiment.cs" />
+    <Compile Include="Experiments\Performance\MaxWeightRatioExperiment.cs" />
     <Compile Include="IExecutor.cs" />
     <Compile Include="IFileManager.cs" />
     <Compile Include="Program.cs" />
@@ -76,5 +76,6 @@
       <Name>KnapsackSdk</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

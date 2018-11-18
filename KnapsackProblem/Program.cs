@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using KnapsackProblem.Experiments;
+using KnapsackProblem.Experiments.Performance;
 
 namespace KnapsackProblem
 {

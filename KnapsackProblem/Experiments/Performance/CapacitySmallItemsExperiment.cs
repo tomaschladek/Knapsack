@@ -1,4 +1,4 @@
-﻿namespace KnapsackProblem.Experiments
+﻿namespace KnapsackProblem.Experiments.Performance
 {
     public class CapacitySmallItemsExperiment : AbstractCounterExperiment
     {
