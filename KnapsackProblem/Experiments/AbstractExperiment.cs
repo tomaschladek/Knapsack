@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using KnapsackSdk.Strategies;
@@ -7,8 +8,8 @@ namespace KnapsackProblem.Experiments
 {
     public abstract class AbstractExperiment<TCacheType> : IExperiment
     {
+        protected readonly Random Random = new Random();
         public abstract string Id { get; }
-        public abstract string SourceFolder { get; }
 
         public void Execute(string sourcePath)
         {
@@ -40,7 +41,7 @@ namespace KnapsackProblem.Experiments
 
         protected List<KnapsackSdk.Dtos.DefinitionDto> GetDefinitions(string sourcePath, int taskSize)
         {
-            return FileManager.GetDefinitions(Path.Combine(sourcePath, SourceFolder, $"knap_{taskSize}.inst.dat")).ToList();
+            return FileManager.GetDefinitions(Path.Combine(sourcePath, "Input", $"knap_{taskSize}.inst.dat")).ToList();
         }
 
 

@@ -87,7 +87,7 @@ namespace KnapsackUnitTests
                 var strategy = new RatioStrategy();
                 var result = Executor.ExecuteStrategy(_samples.Keys.ToList(), _samples.Keys.Select(key => _samples[key]).ToList(), strategy, 2);
                 Assert.AreEqual(0.1122,result.MaxError,0.0001);
-                Assert.AreEqual(0.1590,result.RelativeError, 0.0001);
+                Assert.AreEqual(0.0176,result.RelativeError, 0.0001);
             }
 
             [Test]

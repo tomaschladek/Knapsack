@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using KnapsackSdk.Dtos;
 
 namespace KnapsackProblem.Experiments
 {
     public abstract class AbstractGeneratorExperiment : AbstractExperiment<long>
     {
-        protected static Random Random = new Random();
-        public override string SourceFolder => throw new NotSupportedException();
-
         protected override void Execute(string sourcePath, Dictionary<string, IList<long>> results)
         {
             foreach (var parameter in GetParameters())

@@ -7,7 +7,6 @@ namespace KnapsackProblem.Experiments.Performance
     public class DurationExperiment : AbstractExperiment<ExecutionResultDto>
     {
         public override string Id => "DurationEvaluation";
-        public override string SourceFolder => "Input";
 
         protected override void Execute(string sourcePath, Dictionary<string, IList<ExecutionResultDto>> cache)
         {

@@ -48,11 +48,13 @@
     <Compile Include="Experiments\AbstractCounterExperiment.cs" />
     <Compile Include="Experiments\AbstractExperiment.cs" />
     <Compile Include="Experiments\AbstractGeneratorExperiment.cs" />
-    <Compile Include="Experiments\Performance\CapacityLargeItemsExperiment.cs" />
-    <Compile Include="Experiments\Performance\CapacityNormalItemsExperiment.cs" />
+    <Compile Include="Experiments\Error\AbstractErrorExperiment.cs" />
+    <Compile Include="Experiments\Error\InstanceSizeErrorExperiment.cs" />
+    <Compile Include="Experiments\Error\MaxPriceErrorExperiment.cs" />
+    <Compile Include="Experiments\Error\MaxWeightErrorExperiment.cs" />
+    <Compile Include="Experiments\Error\PriceWeightRatioErrorExperiment.cs" />
+    <Compile Include="Experiments\Error\RandomErrorExperiment.cs" />
     <Compile Include="Experiments\Performance\CapacityOnlyExperiment.cs" />
-    <Compile Include="Experiments\Performance\CapacitySmallItemsExperiment.cs" />
-    <Compile Include="Experiments\Performance\CounterExperiment.cs" />
     <Compile Include="Experiments\Performance\DurationExperiment.cs" />
     <Compile Include="Experiments\Generator.cs" />
     <Compile Include="Experiments\IExperiment.cs" />
