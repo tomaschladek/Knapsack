@@ -1,23 +1,30 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using KnapsackSdk.Dtos;
+using KnapsackSdk.Strategies.Genetic;
+using KnapsackSdk.Strategies.Genetic.Crossing;
+using KnapsackSdk.Strategies.Genetic.Selections;
 
 namespace KnapsackSdk.Strategies
 {
     public class GeneticStrategy : AbstractStrategy
     {
-        public GeneticStrategy(int generationCount, int populationSize, int mutationProbability, int crossoverProbability, ECrossStrategy crossStrategy)
+        public GeneticStrategy(int generationCount, int populationSize, int mutationProbability,
+            int crossoverProbability, ICrossStrategy crossStrategy, ISelectionStrategy selectionStrategy)
         {
             Generations = generationCount;
             PopulationSize = populationSize;
             MutationProbability = mutationProbability;
             CrossoverProbability = crossoverProbability;
             CrossStrategy = crossStrategy;
+            SelectionStrategy = selectionStrategy;
         }
 
-        public ECrossStrategy CrossStrategy { get; set; }
+        public ICrossStrategy CrossStrategy { get; set; }
+        public ISelectionStrategy SelectionStrategy { get; set; }
 
         private int PopulationSize { get; }
         private int Generations { get;}
@@ -31,40 +38,41 @@ namespace KnapsackSdk.Strategies
 
             for (var generationIndex = 0; generationIndex < Generations; generationIndex++)
             {
-                var score = GetScore(definition, generation);
-
-                var generationSelection = GetSelection(random, generation, score);
-                var generationNew = GetNewGeneration(definition, random, generationSelection);
+                var generationSelection = SelectionStrategy.Select(definition, random, generation, PopulationSize).ToList();
+                var generationNew = CrossStrategy.Cross(definition, random, generationSelection, PopulationSize, CrossoverProbability).ToList();
 
                 Mutation(random, generationNew);
 
                 generation = generationNew;
                 var currentResult = GetResult(definition, generation);
-                Debug.WriteLine($"{generationIndex}\t{currentResult.Item1}\t{currentResult.Item2}");
+                Debug.WriteLine($"{generationIndex}\t{currentResult.Item1.Price}\t{currentResult.Item1.Weight}");
             }
 
             var result = GetResult(definition, generation);
-            return (new ResultDto(definition.Id, result.Item1, result.Item3), 0L);
+            var resultBools = new List<bool>();
+            for (int index = 0; index < result.Item2.Count; index++)
+            {
+                resultBools.Add(result.Item2[index]);
+            }
+            return (new ResultDto(definition.Id, result.Item1.Price, resultBools), 0L);
         }
 
-        private static (long, long, IList<bool>) GetResult(DefinitionDto definition, List<IList<bool>> generation)
+        private (ItemDto, BitArray) GetResult(DefinitionDto definition, List<BitArray> generation)
         {
             var candidates = generation
-                .Select(generationItem => (generationItem
-                        .Zip(definition.Items, (isPresent, item) => isPresent ? item : null), generationItem))
-                .Select(item => (item.Item1.Sum(itemL => itemL?.Price ?? 0), item.Item1.Sum(itemL => itemL?.Weight ?? 0), item.Item2))
-                .Where(item => item.Item2 <= definition.Capacity)
+                .Select(generationItem => (GetScoreItem(generationItem,definition),generationItem))
+                .Where(item => item.Item1.Weight <= definition.Capacity)
                 .ToList();
             if (!candidates.Any())
             {
-                return (0, 0, Enumerable.Repeat(false, definition.Items.Count).ToList());
+                return (new ItemDto(0,0), new BitArray(definition.Items.Count));
             }
-            var maxPrice = candidates.Max(item => item.Item1);
-            var result = candidates.First(item => item.Item1 == maxPrice);
+            var maxPrice = candidates.Max(item => item.Item1.Price);
+            var result = candidates.First(item => item.Item1.Price == maxPrice);
             return result;
         }
 
-        private void Mutation(Random random, List<IList<bool>> generationNew)
+        private void Mutation(Random random, List<BitArray> generationNew)
         {
             foreach (var fenotyp in generationNew)
             {
@@ -72,122 +80,36 @@ namespace KnapsackSdk.Strategies
                 {
                     if (random.Next(0, 100) < MutationProbability)
                     {
-                        fenotyp[fenotypIndex] = !fenotyp[fenotypIndex];
+                        fenotyp.Set(fenotypIndex,!fenotyp[fenotypIndex]);
                     }
                 }
             }
         }
 
-        private List<IList<bool>> GetNewGeneration(DefinitionDto definition, Random random, List<IList<bool>> generationSelection)
+        private ItemDto GetScoreItem(BitArray fenotyp, DefinitionDto definition)
         {
-            switch (CrossStrategy)
+            var price = 0L;
+            var weight = 0L;
+            for (int index = 0; index < fenotyp.Count; index++)
             {
-                case ECrossStrategy.Random:
-                    return CrossRandom(definition, random, generationSelection).ToList();
-                case ECrossStrategy.Single:
-                    return CrossSingle(definition, random, generationSelection).ToList();
-                case ECrossStrategy.Double:
-                    return CrossDouble(definition, random, generationSelection).ToList();
-            }
-            throw new NotImplementedException();
-        }
-
-        private IEnumerable<IList<bool>> CrossSingle(DefinitionDto definition, Random random, List<IList<bool>> generationSelection)
-        {
-            throw new NotImplementedException();
-        }
-
-        private IEnumerable<IList<bool>> CrossDouble(DefinitionDto definition, Random random, List<IList<bool>> generationSelection)
-        {
-            throw new NotImplementedException();
-        }
-
-        private IEnumerable<IList<bool>> CrossRandom(DefinitionDto definition, Random random, List<IList<bool>> generationSelection)
-        {
-            for (int populationIndex = 0; populationIndex < PopulationSize; populationIndex += 2)
-            {
-                var randomVector = new List<bool>();
-                for (int itemIndex = 0; itemIndex < definition.Items.Count; itemIndex++)
+                if (fenotyp[index])
                 {
-                    randomVector.Add(random.Next(0, 100) > CrossoverProbability);
-                }
-
-                var first = new List<bool>();
-                var second = new List<bool>();
-
-                for (var crossoverIndex = 0; crossoverIndex < randomVector.Count; crossoverIndex++)
-                {
-                    if (randomVector[crossoverIndex])
-                    {
-                        first.Add(generationSelection[populationIndex][crossoverIndex]);
-                        second.Add(generationSelection[populationIndex + 1][crossoverIndex]);
-                    }
-                    else
-                    {
-                        first.Add(generationSelection[populationIndex + 1][crossoverIndex]);
-                        second.Add(generationSelection[populationIndex][crossoverIndex]);
-                    }
-                }
-                yield return first;
-                yield return second;
-            }
-        }
-
-        private List<IList<bool>> GetSelection(Random random, List<IList<bool>> generation, List<long> score)
-        {
-            var sumScore = score.Sum();
-            var generationSelection = new List<IList<bool>>();
-            for (int newGenerationIndex = 0; newGenerationIndex < PopulationSize; newGenerationIndex++)
-            {
-                var randomValue = random.Next(0, (int)sumScore);
-                var sumValue = 0L;
-                var counter = -1;
-                do
-                {
-                    counter++;
-                    sumValue += score[counter];
-                } while (sumValue <= randomValue);
-                generationSelection.Add(generation[counter]);
-            }
-
-            return generationSelection;
-        }
-
-        private List<long> GetScore(DefinitionDto definition, List<IList<bool>> generation)
-        {
-            var summary = new List<ItemDto>();
-            foreach (var fenotyp in generation)
-            {
-                var items = fenotyp.Zip(definition.Items, (isPresent, item) => isPresent ? item : null).Where(item => item != null).ToList();
-                summary.Add(new ItemDto(items.Sum(item => item.Price), items.Sum(item => item.Weight)));
-            }
-
-            var score = new List<long>();
-            for (int fenotypIndex = 0; fenotypIndex < PopulationSize; fenotypIndex++)
-            {
-                if (summary[fenotypIndex].Weight > definition.Capacity)
-                {
-                    score.Add(summary[fenotypIndex].Price -
-                              (long)((double)definition.Capacity / summary[fenotypIndex].Weight));
-                }
-                else
-                {
-                    score.Add(summary[fenotypIndex].Price);
+                    price += definition.Items[index].Price;
+                    weight += definition.Items[index].Weight;
                 }
             }
-
-            return score;
+            return new ItemDto(weight,price);
         }
 
-        private List<IList<bool>> InitializeGeneration(DefinitionDto definition, Random random)
+        private List<BitArray> InitializeGeneration(DefinitionDto definition, Random random)
         {
-            var generation = new List<IList<bool>>();
+            var generation = new List<BitArray>();
             for (int generationIndex = 0; generationIndex < PopulationSize; generationIndex++)
             {
-                generation.Add(new List<bool>());
+                generation.Add(new BitArray(definition.Items.Count));
                 for (int itemIndex = 0; itemIndex < definition.Items.Count; itemIndex++)
                 {
-                    generation.Last().Add(random.Next(0, 100) > 50);
+                    generation.Last().Set(itemIndex,random.Next(0, 100) > 50);
                 }
             }
 
