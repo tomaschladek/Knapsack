@@ -2,7 +2,7 @@
 Knapsack problem with various resolution strategies
 
 
-Implementation of following strategies
+Implementation of following strategies:
 - Iterative
 - Recursive
 - Branch & Boundaries
@@ -11,3 +11,8 @@ Implementation of following strategies
 - Decomposition by weight recursive
 - Decomposition by price
 - Ratio price/weight
+
+# Features
+- Instance generator
+- File reader/writer
+- Experiments
