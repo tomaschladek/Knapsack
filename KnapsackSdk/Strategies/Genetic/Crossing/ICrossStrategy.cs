@@ -41,7 +41,7 @@ namespace KnapsackSdk.Strategies.Genetic.Crossing
             int populationSize,
             int crossoverProbability)
         {
-            for (var fenotypIndex = 0; fenotypIndex < generation.Count; fenotypIndex += 2)
+            for (var fenotypIndex = 0; fenotypIndex < generation.Count-1; fenotypIndex += 2)
             {
                 var cutFrom = random.Next(0, definition.Items.Count);
                 var cutTo = random.Next(0, definition.Items.Count);

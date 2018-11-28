@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using KnapsackSdk.Dtos;
-using KnapsackSdk.Strategies.Genetic;
 using KnapsackSdk.Strategies.Genetic.Crossing;
 using KnapsackSdk.Strategies.Genetic.Selections;
 
@@ -38,7 +37,7 @@ namespace KnapsackSdk.Strategies
 
             for (var generationIndex = 0; generationIndex < Generations; generationIndex++)
             {
-                var generationSelection = SelectionStrategy.Select(definition, random, generation, PopulationSize).ToList();
+                var generationSelection = SelectionStrategy.Select(definition, random, generation).ToList();
                 var generationNew = CrossStrategy.Cross(definition, random, generationSelection, PopulationSize, CrossoverProbability).ToList();
 
                 Mutation(random, generationNew);

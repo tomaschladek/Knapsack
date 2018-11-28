@@ -8,8 +8,7 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
 {
     public interface ISelectionStrategy
     {
-        IEnumerable<BitArray> Select(DefinitionDto definition, Random random, List<BitArray> generation, 
-            int populationSize);
+        IEnumerable<BitArray> Select(DefinitionDto definition, Random random, List<BitArray> generation);
     }
 
     public abstract class AbstractSelectionStrategy : ISelectionStrategy
@@ -30,19 +29,20 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
             return new ItemDto(weight, price);
         }
 
-        public abstract IEnumerable<BitArray> Select(DefinitionDto definition, Random random, List<BitArray> generation, int populationSize);
+        public abstract IEnumerable<BitArray> Select(DefinitionDto definition, Random random, List<BitArray> generation);
     }
 
-    public class ReplaceAllByPriceySelectionStrategy : AbstractSelectionStrategy
+    public class ReplaceAllByPriceSelectionStrategy : AbstractSelectionStrategy
     {
-        public override IEnumerable<BitArray> Select(DefinitionDto definition, Random random, List<BitArray> generation, int populationSize)
+        protected virtual int StartCount { get; set; }
+
+        public override IEnumerable<BitArray> Select(DefinitionDto definition, Random random, List<BitArray> generation)
         {
-            var score = GetScore(definition, generation, populationSize);
+            var score = GetScore(definition, generation).ToList();
             var sumScore = score.Sum();
-            var generationSelection = new List<BitArray>();
-            for (int newGenerationIndex = 0; newGenerationIndex < populationSize; newGenerationIndex++)
+            foreach (var _ in generation)
             {
-                var randomValue = random.Next(0, (int)sumScore);
+                var randomValue = random.Next(0, (int) sumScore);
                 var sumValue = 0L;
                 var counter = -1;
                 do
@@ -50,44 +50,35 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
                     counter++;
                     sumValue += score[counter];
                 } while (sumValue <= randomValue);
-                generationSelection.Add(generation[counter]);
-            }
 
-            return generationSelection;
+                yield return generation[counter];
+            }
         }
 
-
-        private List<long> GetScore(DefinitionDto definition, List<BitArray> generation, int populationSize)
+        private IEnumerable<long> GetScore(DefinitionDto definition, List<BitArray> generation)
         {
-            var summary = new List<ItemDto>();
-            foreach (var fenotyp in generation)
+            foreach (var item in generation.Select(fenotyp => GetScoreItem(fenotyp, definition)))
             {
-                summary.Add(GetScoreItem(fenotyp, definition));
+                yield return item.Weight > definition.Capacity
+                    ? 0
+                    : item.Price;
             }
-
-            var score = new List<long>();
-            for (int fenotypIndex = 0; fenotypIndex < populationSize; fenotypIndex++)
-            {
-                score.Add(
-                    summary[fenotypIndex].Weight > definition.Capacity 
-                    ? 0 
-                    : summary[fenotypIndex].Price);
-            }
-
-            return score;
         }
     }
 
     public class ReplaceAllByOrderSelectionStrategy : AbstractSelectionStrategy
     {
-        public override IEnumerable<BitArray> Select(DefinitionDto definition, Random random, List<BitArray> generation, int populationSize)
+        public override IEnumerable<BitArray> Select(DefinitionDto definition, Random random, List<BitArray> generation)
         {
             var ordered = generation
                 .Select((bits, index) => new {Bits = bits, OriginalIndex = index})
                 .OrderBy(item => GetScoreItem(item.Bits, definition).Price)
-                .Select((tuple,newIndex) => new {tuple.Bits, tuple.OriginalIndex, NewIndex = populationSize-newIndex}).ToList();
+                .Select((tuple,newIndex) => new {tuple.Bits, tuple.OriginalIndex, NewIndex = generation.Count - newIndex})
+                .ToList();
+
             var sumOrder = ordered.Sum(item => item.NewIndex);
-            for (int newGenerationIndex = 0; newGenerationIndex < populationSize; newGenerationIndex++)
+
+            for (int newGenerationIndex = 0; newGenerationIndex < generation.Count; newGenerationIndex++)
             {
                 var randomValue = random.Next(0, sumOrder);
                 var sumValue = 0L;

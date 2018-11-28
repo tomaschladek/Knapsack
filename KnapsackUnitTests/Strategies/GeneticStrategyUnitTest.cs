@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using KnapsackSdk.Dtos;
 using KnapsackSdk.Strategies;
-using KnapsackSdk.Strategies.Genetic;
 using KnapsackSdk.Strategies.Genetic.Crossing;
 using KnapsackSdk.Strategies.Genetic.Selections;
 using NUnit.Framework;
@@ -65,7 +64,7 @@ namespace KnapsackUnitTests.Strategies
             [Test]
             public void ConvergateToSomeResults()
             {
-                Strategy = new GeneticStrategy(1000,30,5,50, new DoubleCrossStrategy(), new ReplaceAllByOrderSelectionStrategy());
+                Strategy = new GeneticStrategy(1000,30,2,50, new DoubleCrossStrategy(), new EliteSelectionStrategy(5));
                 var result = Strategy.Compute(Definition);
                 Assert.IsTrue(Result.Price >= result.Item1.Price);
                 Assert.IsTrue(result.Item1.Price >= 0);
