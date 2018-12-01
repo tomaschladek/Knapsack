@@ -3,17 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using KnapsackSdk.Dtos;
+using KnapsackSdk.Strategies.Genetic.Corrections;
 
 namespace KnapsackSdk.Strategies.Genetic.Selections
 {
     public class TournamentSelectionStrategy : AbstractSelectionStrategy
     {
-        public TournamentSelectionStrategy(int tournamentSize) : this(tournamentSize, 0, 0)
+        public TournamentSelectionStrategy(int tournamentSize) : this(tournamentSize, 0, 0, new NoCorrectionStrategy())
         {
 
         }
 
-        public TournamentSelectionStrategy(int tournamentSize, int elitesCount, int weakestsCount) : base(elitesCount, weakestsCount)
+        public TournamentSelectionStrategy(int tournamentSize, int elitesCount, int weakestsCount, ICorrectionStrategy correctionStrategy) : base(elitesCount, weakestsCount, correctionStrategy)
         {
             TournamentSize = tournamentSize;
         }
@@ -33,6 +34,11 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
                     })
                     .Where(tuple => tuple.Score.Weight <= definition.Capacity)
                     .ToList();
+                if (!tournament.Any())
+                {
+                    yield return generation[random.Next(0, generation.Count)];
+                    continue;
+                }
                 var max = tournament.Max(item => item.Score.Price);
                 if (max != 0)
                 {

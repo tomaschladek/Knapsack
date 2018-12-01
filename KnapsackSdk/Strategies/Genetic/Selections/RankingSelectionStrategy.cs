@@ -3,17 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using KnapsackSdk.Dtos;
+using KnapsackSdk.Strategies.Genetic.Corrections;
 
 namespace KnapsackSdk.Strategies.Genetic.Selections
 {
     public class RankingSelectionStrategy : AbstractSelectionStrategy
     {
 
-        public RankingSelectionStrategy() : this(0,0)
+        public RankingSelectionStrategy() : this(0,0, new NoCorrectionStrategy())
         {
         }
 
-        public RankingSelectionStrategy(int elitesCount, int weakestsCount) : base(elitesCount,weakestsCount)
+        public RankingSelectionStrategy(int elitesCount, int weakestsCount, ICorrectionStrategy correctionStrategy) : base(elitesCount,weakestsCount,correctionStrategy)
         {
         }
         

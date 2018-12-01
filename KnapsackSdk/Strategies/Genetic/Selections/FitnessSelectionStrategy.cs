@@ -3,16 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using KnapsackSdk.Dtos;
+using KnapsackSdk.Strategies.Genetic.Corrections;
 
 namespace KnapsackSdk.Strategies.Genetic.Selections
 {
     public class FitnessSelectionStrategy : AbstractSelectionStrategy
     {
-        public FitnessSelectionStrategy() : this(0,0)
+        public FitnessSelectionStrategy() : this(0,0, new NoCorrectionStrategy())
         {
         }
 
-        public FitnessSelectionStrategy(int elitesCount, int weakestsCount) : base(elitesCount, weakestsCount)
+        public FitnessSelectionStrategy(int elitesCount, int weakestsCount, ICorrectionStrategy correctionStrategy) : base(elitesCount, weakestsCount,correctionStrategy)
         {
         }
 

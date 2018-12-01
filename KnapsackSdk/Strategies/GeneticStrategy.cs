@@ -22,8 +22,8 @@ namespace KnapsackSdk.Strategies
             SelectionStrategy = selectionStrategy;
         }
 
-        public ICrossStrategy CrossStrategy { get; set; }
-        public ISelectionStrategy SelectionStrategy { get; set; }
+        private ICrossStrategy CrossStrategy { get; set; }
+        private ISelectionStrategy SelectionStrategy { get; set; }
 
         private int PopulationSize { get; }
         private int Generations { get;}
@@ -116,10 +116,5 @@ namespace KnapsackSdk.Strategies
         }
 
         public override string Id => "Genetic";
-    }
-
-    public enum ECrossStrategy
-    {
-        Single,Double,Random
     }
 }

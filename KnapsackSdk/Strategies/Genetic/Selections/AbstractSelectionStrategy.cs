@@ -3,16 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using KnapsackSdk.Dtos;
+using KnapsackSdk.Strategies.Genetic.Corrections;
 
 namespace KnapsackSdk.Strategies.Genetic.Selections
 {
     public abstract class AbstractSelectionStrategy : ISelectionStrategy
     {
-        public AbstractSelectionStrategy(int elitesCount, int weakestsCount)
+        public AbstractSelectionStrategy(int elitesCount, int weakestsCount, ICorrectionStrategy correctionStrategy)
         {
             ElitesCount = elitesCount;
             WeakestsCount = weakestsCount;
+            CorrectionStrategy = correctionStrategy;
         }
+
+        private ICorrectionStrategy CorrectionStrategy { get; set; }
 
         private int ElitesCount { get; set; }
         private int WeakestsCount { get; set; }
@@ -33,7 +37,7 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
             return new ItemDto(weight, price);
         }
 
-        protected IEnumerable<BitArray> SelectElites(DefinitionDto definition, List<BitArray> generation)
+        private IEnumerable<BitArray> SelectElites(DefinitionDto definition, List<BitArray> generation)
         {
             var elites = generation
                 .Select(fenotyp => new { Fenotyp = fenotyp, Score = GetScoreItem(fenotyp, definition) })
@@ -46,7 +50,7 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
             return elites.Select(item => item.Fenotyp);
         }
 
-        protected IEnumerable<BitArray> RemoveWeakests(DefinitionDto definition, List<BitArray> generation)
+        private IEnumerable<BitArray> RemoveWeakests(DefinitionDto definition, List<BitArray> generation)
         {
             return generation
                 .Select(fenotyp => new { Fenotyp = fenotyp, Score = GetScoreItem(fenotyp, definition) })
@@ -59,7 +63,8 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
 
         public IEnumerable<BitArray> Select(DefinitionDto definition, Random random, List<BitArray> generation)
         {
-            var elites = SelectElites(definition, generation).ToList();
+            var correctedGeneration = CorrectionStrategy.CorrectGeneration(definition, generation).ToList();
+            var elites = SelectElites(definition, correctedGeneration).ToList();
             var childrenByScore = SelectByCriteria(definition, random, generation.ToList());
             var result = RemoveWeakests(definition,elites.Concat(childrenByScore).ToList());
             return result;
