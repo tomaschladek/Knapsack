@@ -9,5 +9,7 @@ namespace KnapsackSdk.Strategies.Genetic.Crossing
     {
         IEnumerable<BitArray> Cross(DefinitionDto definition, Random random,
             List<BitArray> generation, int populationSize, int crossoverProbability);
+
+        string Id { get; }
     }
 }

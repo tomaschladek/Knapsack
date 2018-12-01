@@ -9,6 +9,7 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
 {
     public class RankingSelectionStrategy : AbstractSelectionStrategy
     {
+        public override string Id => $"Ranking-E:{ElitesCount}-W:{WeakestsCount}-Corr:{CorrectionStrategy.Id}";
 
         public RankingSelectionStrategy() : this(0,0, new NoCorrectionStrategy())
         {

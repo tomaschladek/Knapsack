@@ -7,5 +7,6 @@ namespace KnapsackSdk.Strategies.Genetic.Corrections
     public interface ICorrectionStrategy
     {
         IEnumerable<BitArray> CorrectGeneration(DefinitionDto definition, List<BitArray> generation);
+        string Id { get; }
     }
 }

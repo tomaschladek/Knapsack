@@ -9,6 +9,8 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
 {
     public class TournamentSelectionStrategy : AbstractSelectionStrategy
     {
+        public override string Id => $"Tournament-Size:{TournamentSize}-E:{ElitesCount}-W:{WeakestsCount}-Corr:{CorrectionStrategy.Id}";
+
         public TournamentSelectionStrategy(int tournamentSize) : this(tournamentSize, 0, 0, new NoCorrectionStrategy())
         {
 
@@ -19,7 +21,7 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
             TournamentSize = tournamentSize;
         }
 
-        public int TournamentSize { get; set; }
+        private int TournamentSize { get; set; }
 
         protected override IEnumerable<BitArray> SelectByCriteria(DefinitionDto definition, Random random, List<BitArray> generation)
         {

@@ -59,6 +59,11 @@
     <Compile Include="Experiments\Generator.cs" />
     <Compile Include="Experiments\IExperiment.cs" />
     <Compile Include="Experiments\IGenerator.cs" />
+    <Compile Include="Experiments\Performance\GeneticAlgorithmCorrectionExperiment.cs" />
+    <Compile Include="Experiments\Performance\GeneticAlgorithmCrossExperiment.cs" />
+    <Compile Include="Experiments\Performance\GeneticAlgorithmExperiment.cs" />
+    <Compile Include="Experiments\Performance\GeneticAlgorithmMutationExperiment.cs" />
+    <Compile Include="Experiments\Performance\GeneticAlgorithmSelectionExperiment.cs" />
     <Compile Include="Experiments\Performance\InstanceSizeExperiment.cs" />
     <Compile Include="Experiments\Performance\MaxPriceExperiment.cs" />
     <Compile Include="Experiments\Performance\MaxPriceRatioExperiment.cs" />

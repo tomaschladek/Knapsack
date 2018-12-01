@@ -31,5 +31,7 @@ namespace KnapsackSdk.Strategies.Genetic.Crossing
                 yield return second;
             }
         }
+
+        public string Id => "2 point cross";
     }
 }

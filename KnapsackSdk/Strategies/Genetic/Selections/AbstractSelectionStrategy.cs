@@ -16,10 +16,10 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
             CorrectionStrategy = correctionStrategy;
         }
 
-        private ICorrectionStrategy CorrectionStrategy { get; set; }
+        protected ICorrectionStrategy CorrectionStrategy { get; set; }
 
-        private int ElitesCount { get; set; }
-        private int WeakestsCount { get; set; }
+        protected int ElitesCount { get; set; }
+        protected int WeakestsCount { get; set; }
         protected int StartCount { get; set; }
 
         protected ItemDto GetScoreItem(BitArray fenotyp, DefinitionDto definition)
@@ -69,6 +69,8 @@ namespace KnapsackSdk.Strategies.Genetic.Selections
             var result = RemoveWeakests(definition,elites.Concat(childrenByScore).ToList());
             return result;
         }
+
+        public abstract string Id { get; }
 
         protected abstract IEnumerable<BitArray> SelectByCriteria(DefinitionDto definition, Random random, List<BitArray> generation);
     }

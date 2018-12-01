@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using KnapsackSdk.Dtos;
 using KnapsackSdk.Strategies.Genetic.Crossing;
@@ -26,7 +25,7 @@ namespace KnapsackSdk.Strategies
         private ISelectionStrategy SelectionStrategy { get; set; }
 
         private int PopulationSize { get; }
-        private int Generations { get;}
+        public int Generations { get; set; }
         private int MutationProbability { get; }
         private int CrossoverProbability { get; }
 
@@ -43,8 +42,8 @@ namespace KnapsackSdk.Strategies
                 Mutation(random, generationNew);
 
                 generation = generationNew;
-                var currentResult = GetResult(definition, generation);
-                Debug.WriteLine($"{generationIndex}\t{currentResult.Item1.Price}\t{currentResult.Item1.Weight}");
+                //var currentResult = GetResult(definition, generation);
+                //Debug.WriteLine($"{generationIndex}\t{currentResult.Item1.Price}\t{currentResult.Item1.Weight}");
             }
 
             var result = GetResult(definition, generation);
@@ -115,6 +114,6 @@ namespace KnapsackSdk.Strategies
             return generation;
         }
 
-        public override string Id => "Genetic";
+        public override string Id => $"GA-G:{Generations}-P:{PopulationSize}-M:{MutationProbability}-C:{CrossStrategy.Id}-S:{SelectionStrategy.Id}";
     }
 }

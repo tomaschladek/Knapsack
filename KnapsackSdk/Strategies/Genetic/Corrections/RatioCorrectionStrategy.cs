@@ -7,6 +7,8 @@ namespace KnapsackSdk.Strategies.Genetic.Corrections
 {
     public class RatioCorrectionStrategy : ICorrectionStrategy
     {
+        public string Id => "Ratio correction";
+
         public IEnumerable<BitArray> CorrectGeneration(DefinitionDto definition, List<BitArray> generation)
         {
             foreach (var fenotyp in generation)

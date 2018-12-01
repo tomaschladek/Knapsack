@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using KnapsackProblem.Experiments;
-using KnapsackProblem.Experiments.Error;
+using KnapsackProblem.Experiments.Performance;
 
 namespace KnapsackProblem
 {
@@ -46,7 +46,7 @@ namespace KnapsackProblem
                 //new MaxWeightRatioErrorExperiment(30),
                 //new MaxWeightRatioErrorExperiment(31),
                 //new MaxWeightRatioErrorExperiment(32),
-                new MaxPriceErrorExperiment(null),
+                //new GeneticAlgorithmExperiment(),
                 //new MaxPriceErrorExperiment(10),
                 //new MaxPriceErrorExperiment(11),
                 //new MaxPriceErrorExperiment(12),
@@ -92,6 +92,7 @@ namespace KnapsackProblem
                 //new PriceWeightRatioErrorExperiment(75),
                 //new PriceWeightRatioErrorExperiment(100),
                 //new InstanceSizeErrorExperiment()
+                new GeneticAlgorithmMutationExperiment()
         };
             //for (int weightIndex = 30; weightIndex <= 70; weightIndex += 5)
             //{
