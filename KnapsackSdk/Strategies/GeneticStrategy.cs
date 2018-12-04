@@ -37,7 +37,7 @@ namespace KnapsackSdk.Strategies
             for (var generationIndex = 0; generationIndex < Generations; generationIndex++)
             {
                 var generationSelection = SelectionStrategy.Select(definition, random, generation).ToList();
-                var generationNew = CrossStrategy.Cross(definition, random, generationSelection, PopulationSize, CrossoverProbability).ToList();
+                var generationNew = CrossStrategy.Cross(definition.Items.Count, random, generationSelection, PopulationSize, CrossoverProbability).ToList();
 
                 Mutation(random, generationNew);
 
